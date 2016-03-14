@@ -1,0 +1,4 @@
+jdbcUrl = jdbc:mysql://localhost/test
+user = root
+password = 
+devMode = true
