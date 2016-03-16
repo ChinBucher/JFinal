@@ -7,7 +7,8 @@ import com.jfinal.core.Controller;
 
 public class AdminController extends Controller{
 	public void index(){
-		int role = getSessionAttr("userRole");
+		User user = getSessionAttr("loginUser");
+		int role = user.get("role");
 		System.out.println("role:"+role);
 		setAttr("role",role);
 		

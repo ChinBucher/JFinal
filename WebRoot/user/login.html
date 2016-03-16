@@ -61,9 +61,13 @@
 						$("password").focus();
 						$("#common").html("username or password incorrect");
 					}else if(data.code == 1){
+						//alert("login succeed");
 						$("#common").html("login succeed");
-						window.location = "${CTX}/user";
-						alert("login succeed");
+						if(data.name == "admin"){
+							window.location = "${CTX}/user";
+						}else{
+							window.location = "${CTX}/user/detail";
+						}
 					}else{
 						$("#common").html("error code:"+data.code+";"+data.message);
 					}

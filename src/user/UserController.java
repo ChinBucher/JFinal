@@ -1,6 +1,7 @@
 package user;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import blog.BlogValidator;
@@ -10,6 +11,7 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.jfinal.ext.interceptor.SessionInViewInterceptor;
 
+import model.Blog;
 import model.User;
 
 public class UserController extends Controller{
@@ -21,6 +23,7 @@ public class UserController extends Controller{
 		//# 设置属性代替 #
 		
 		//# 根据用户角色跳转页面 主要为管理员 #
+		/*
 		User loginUser = getSessionAttr("loginUser");
 		int role = loginUser.getRole();
 		System.out.println("role:"+role);
@@ -32,6 +35,8 @@ public class UserController extends Controller{
 			setAttr("userPage", User.user.paginate(getParaToInt(0, 1), 10));
 			render("user.html");
 		}	
+		*/
+		redirect("/admin");
 	}
 	
 	
@@ -69,7 +74,7 @@ public class UserController extends Controller{
 	}
 	*/
 	public void logout(){
-		removeSessionAttr("userRole");
+		removeSessionAttr("loginUser");
 		setAttr("role",null);
 		redirect("/");
 	}
@@ -96,6 +101,7 @@ public class UserController extends Controller{
         	System.out.println("pwd: "+user_pwd);
             if(user_pwd.equals(pwd)){
             	setAttr("code",1);
+            	setAttr("name",nowUser.get("name"));
             }else{
             	setAttr("code",0);
             }
@@ -130,6 +136,23 @@ public class UserController extends Controller{
 				setAttr("code",0);
 			}
 			renderJson();
+		}
+		
+		//用户详情
+		public void detail(){
+			//得到当前用户
+			User userNow = getSessionAttr("loginUser");
+			System.out.println("userNow:"+userNow);
+			//得到当前用户的博客
+			int author_id = userNow.get("id");
+			System.out.println("author_id:"+author_id);
+			//String sql = "select * from blog where author_id = ?;";
+			//Blog blog = Blog.me.findFirst(sql,id);
+			List<Blog> blog = Blog.me.find("select * from blog where author_id = "+author_id+";");
+			
+			setAttr("user",userNow);
+			setAttr("blogPage", blog);
+			render("/user/detail.html");
 		}
 		
 

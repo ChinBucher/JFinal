@@ -1,8 +1,11 @@
 package blog;
 
+import java.util.List;
+
 import com.jfinal.core.Controller;
 
 import model.Blog;
+
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 
@@ -39,6 +42,19 @@ public class BlogController extends Controller {
 	public void delete() {
 		Blog.me.deleteById(getParaToInt());
 		redirect("/blog");
+	}
+	
+	public void detail(){
+		System.out.println("detail blog");
+		int id = getParaToInt();
+		System.out.println("id:"+id);
+		//String sql = "select * from blog where author_id = ?;";
+		//Blog blog = Blog.me.findFirst(sql,id);
+		List<Blog> blog = Blog.me.find("select * from blog where id = "+id+";");
+		
+		setAttr("blog",blog);
+		
+		render("/blog/detail.html");
 	}
 }
 
